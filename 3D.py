@@ -2,7 +2,6 @@ import pygame
 import sys
 import math
 
-
 # Constants
 WIDTH = 960
 HEIGHT = 480
@@ -19,7 +18,7 @@ LOOK_SENSITIVITY = 0.1
 PLAYER_MOVE_SPEED = 2
 
 # Variables
-player_x = WIDTH // 4   # In the middle of the 2D map
+player_x = WIDTH // 4  # In the middle of the 2D map
 player_y = HEIGHT // 2
 player_angle = math.pi
 player_walkForward = True
@@ -45,10 +44,11 @@ pygame.init()
 
 # Create game window
 window = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Raycasting")
+pygame.display.set_caption("Ray casting")
 
 # Init timer
 clock = pygame.time.Clock()
+
 
 # Draw map
 def drawMap():
@@ -60,7 +60,7 @@ def drawMap():
             pygame.draw.rect(
                 surface=window,
                 color=(200, 200, 200) if mMap[row][col] == '1' else (100, 100, 100),
-                rect=(col * TILE_SIZE, row * TILE_SIZE, TILE_SIZE-1, TILE_SIZE-1)
+                rect=(col * TILE_SIZE, row * TILE_SIZE, TILE_SIZE - 1, TILE_SIZE - 1)
             )
 
     # Draw player
@@ -71,7 +71,8 @@ def drawMap():
         radius=8
     )
 
-# Raycasting algorithm
+
+# Ray casting algorithm
 def cast_rays():
     # Define  left most angle of FOV
     start_angle = player_angle - HALF_FOV
@@ -98,7 +99,7 @@ def cast_rays():
                     pygame.draw.rect(
                         surface=window,
                         color=(50, 255, 50),
-                        rect=(target_col * TILE_SIZE, target_row * TILE_SIZE, TILE_SIZE-2, TILE_SIZE-2)
+                        rect=(target_col * TILE_SIZE, target_row * TILE_SIZE, TILE_SIZE - 2, TILE_SIZE - 2)
                     )
 
                     # Wall shading
@@ -123,7 +124,7 @@ def cast_rays():
                               SCALE, int(wall_height))
                     )
 
-                    # Break the loop so the ray doesnt go through walls
+                    # Break the loop so the ray doesn't go through walls
                     break
 
             # Draw ray
@@ -138,6 +139,7 @@ def cast_rays():
         # Increment angle by a single step
         start_angle += STEP_ANGLE
 
+
 # Player collision
 def isCollidingWalls():
     # Convert player position to col and row
@@ -151,15 +153,16 @@ def isCollidingWalls():
         # Check if the player is inside wall
         if player_piece == '1':
             return True
-        else: return False
+        else:
+            return False
 
 
 # Mainloop
 while True:
     # Update background color
     window.fill((0, 0, 0))
-    pygame.draw.rect(window, (100, 100, 100), (WIDTH//2, HEIGHT//2, WIDTH//2, HEIGHT))
-    pygame.draw.rect(window, (200, 200, 200), (WIDTH//2, -HEIGHT//2, WIDTH//2, HEIGHT))
+    pygame.draw.rect(window, (100, 100, 100), (WIDTH // 2, HEIGHT // 2, WIDTH // 2, HEIGHT))
+    pygame.draw.rect(window, (200, 200, 200), (WIDTH // 2, -HEIGHT // 2, WIDTH // 2, HEIGHT))
 
     # Collision detection
     if isCollidingWalls():
@@ -183,13 +186,15 @@ while True:
     # Draw 2D Map
     drawMap()
 
-    # Apply raycasting
+    # Apply ray casting
     cast_rays()
 
     # Player movement
     keys = pygame.key.get_pressed()
-    if keys[pygame.K_LEFT]: player_angle -= LOOK_SENSITIVITY
-    elif keys[pygame.K_RIGHT]: player_angle += LOOK_SENSITIVITY
+    if keys[pygame.K_LEFT]:
+        player_angle -= LOOK_SENSITIVITY
+    elif keys[pygame.K_RIGHT]:
+        player_angle += LOOK_SENSITIVITY
 
     if keys[pygame.K_w]:
         player_x += -math.sin(player_angle) * PLAYER_MOVE_SPEED
@@ -209,4 +214,3 @@ while True:
 
     # Update display
     pygame.display.flip()
-
